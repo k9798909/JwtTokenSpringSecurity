@@ -43,7 +43,7 @@ public class SecurityConfiguration {
     @Bean
     public AuthenticationManager authenticationManager(HttpSecurity http, PasswordEncoder passwordEncoder) throws Exception {
     	AuthenticationManagerBuilder authenticationManagerBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
-        //DaoAuthenticationProvider預設驗證帳號的方式，此段在設定DaoAuthenticationProvider驗證帳號用的service以及密碼編碼。
+        //DaoAuthenticationProvider預設驗證帳號的方式，此段在設定DaoAuthenticationProvider驗證帳號用的service以及密碼編碼，login時直接使用此authenticationManager。
         authenticationManagerBuilder.userDetailsService(userDetailsService)
         							.passwordEncoder(passwordEncoder);
         //提供ProviderManager認證
