@@ -3,6 +3,7 @@ package com.example.SpringSecurity.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -35,7 +36,10 @@ public class SecurityConfiguration {
 			.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 			 //UsernamePasswordAuthenticationFilter會在使用formlogin時註冊，沒有註冊也沒關係順序會在FilterOrderRegistration定義
 			.addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class)
-			;
+			.exceptionHandling(exception -> exception
+				.authenticationEntryPoint((request, response, e) -> response.sendError(HttpStatus.UNAUTHORIZED.value(), HttpStatus.UNAUTHORIZED.getReasonPhrase()))
+				.accessDeniedHandler((request, response, e) -> response.sendError(HttpStatus.FORBIDDEN.value(), HttpStatus.FORBIDDEN.getReasonPhrase()))
+			);
 		return http.build();
 	}
 	
